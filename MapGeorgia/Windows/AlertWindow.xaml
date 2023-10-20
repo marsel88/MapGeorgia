@@ -1,0 +1,77 @@
+﻿<Window
+    x:Class="MapGeorgia.Windows.AlertWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:MapGeorgia.Windows"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Warning!"
+    Width="300"
+    Height="120"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    Icon="/Resources/maps.ico"
+    ResizeMode="NoResize"
+    TextElement.FontSize="14"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
+    <Border
+        BorderBrush="#2196f3"
+        BorderThickness="1"
+        CornerRadius="10">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="2*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+
+            <WrapPanel
+                Grid.Row="0"
+                Margin="5,0"
+                VerticalAlignment="Center">
+                <Image Width="17" Source="/Resources/maps.png" />
+                <Label Content="Warning!" />
+            </WrapPanel>
+
+            <StackPanel Grid.Row="1">
+                <Border
+                    Margin="5,0"
+                    BorderBrush="#2196f3"
+                    BorderThickness="0,2,0,0" />
+                <TextBlock
+                    x:Name="MsgTB"
+                    Margin="5,5"
+                    Foreground="White"
+                    Text="Something wrong :("
+                    TextWrapping="Wrap" />
+            </StackPanel>
+
+            <WrapPanel Grid.Row="2" Margin="0,0,5,5" HorizontalAlignment="Right"
+                VerticalAlignment="Bottom">
+                <Button      
+                Width="52"
+                Height="23" 
+                Click="Button_Click"
+                Content="OK"
+                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                Style="{StaticResource MaterialDesignRaisedButton}" Cursor="Hand" />
+
+                <Button
+                    Visibility="Collapsed"
+                    x:Name="CancelBtn"
+                    Margin="5, 0"
+                    Width="auto"
+                    Height="23" 
+                    Content="Cancel"
+                    IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                    Style="{StaticResource MaterialDesignRaisedButton}" Cursor="Hand" Click="CancelBtn_Click" />
+            </WrapPanel>
+        </Grid>
+    </Border>
+</Window>

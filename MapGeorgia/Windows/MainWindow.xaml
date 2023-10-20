@@ -1,0 +1,261 @@
+﻿<Window
+    x:Class="MapGeorgia.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:MapGeorgia"
+    xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="GoGoMap!"
+    Width="800"
+    Height="450"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    Icon="/Resources/maps.ico"
+    MouseDown="Window_MouseDown"
+    ResizeMode="NoResize"
+    TextElement.FontSize="14"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.PopupBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TextBlock.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.Green.Named.Primary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <ScrollViewer
+            Grid.Row="1"
+            Margin="10,10,0,10"
+            Panel.ZIndex="1"
+            HorizontalScrollBarVisibility="Hidden"
+            VerticalScrollBarVisibility="Visible">
+            <StackPanel>
+                <Grid Margin="0,0,17,0">
+                    <TextBox
+                        x:Name="SearchTB"
+                        Padding="20,7,0,0"
+                        Background="White"
+                        Foreground="Black"
+                        MaxLength="25"
+                        TextChanged="SearchTB_TextChanged" />
+                    <materialDesign:PackIcon
+                        Margin="2"
+                        VerticalAlignment="Center"
+                        Foreground="Black"
+                        Kind="MapMarker" />
+                    <Button HorizontalAlignment="Right" Style="{StaticResource MaterialDesignFlatButton}">
+                        <materialDesign:PackIcon Kind="Search" Foreground="Black" />
+                    </Button>
+                </Grid>
+                <Grid Margin="8">
+                    <ListView x:Name="DataLV" ItemsSource="{Binding Places}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Border
+                                                Width="227"
+                                                BorderBrush="LightGray"
+                                                BorderThickness="0,0,0,0">
+
+                                                <Grid Height="80">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="auto" />
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <StackPanel
+                                                        Grid.Column="0"
+                                                        Height="60"
+                                                        HorizontalAlignment="Left">
+                                                        <TextBlock Text="{Binding Name}" />
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock
+                                                                Margin="1"
+                                                                VerticalAlignment="Center"
+                                                                FontSize="14"
+                                                                FontWeight="Bold"
+                                                                Foreground="#2196f3"
+                                                                Text="{Binding Rating}" />
+                                                            <materialDesign:RatingBar
+                                                                x:Name="BasicRatingBar"
+                                                                Width="150"
+                                                                IsReadOnly="True"
+                                                                Value="{Binding Rating}" />
+                                                        </StackPanel>
+                                                        <TextBlock Opacity="0.7" Text="{Binding Description}" />
+                                                    </StackPanel>
+                                                    <Button
+                                                        x:Name="ItemBtn"
+                                                        Grid.Column="1"
+                                                        Width="60"
+                                                        Height="60"
+                                                        HorizontalAlignment="Center"
+                                                        BorderBrush="Transparent"
+                                                        Click="ItemBtn_Click"
+                                                        CommandParameter="{Binding ID}">
+                                                        <Button.Background>
+                                                            <ImageBrush ImageSource="{Binding Photo}" Stretch="UniformToFill" />
+                                                        </Button.Background>
+                                                    </Button>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+
+        <WrapPanel
+            Grid.Column="0"
+            Margin="10,8,5,8"
+            HorizontalAlignment="Left">
+            <Image Source="/Resources/maps.png" />
+            <Label Content="GoGoMap!" FontSize="14" />
+        </WrapPanel>
+
+        <WrapPanel Grid.Column="1" HorizontalAlignment="Right">
+            <Button
+                x:Name="HideBtn"
+                HorizontalAlignment="Right"
+                Click="HideBtn_Click"
+                Style="{StaticResource MaterialDesignFlatButton}">
+                <materialDesign:PackIcon Cursor="" Kind="Minus" />
+            </Button>
+
+            <Button
+                x:Name="StateBtn"
+                HorizontalAlignment="Right"
+                Click="StateBtn_Click"
+                Style="{StaticResource MaterialDesignFlatButton}">
+                <materialDesign:PackIcon Kind="CardMultipleOutline" />
+            </Button>
+
+            <Button
+                x:Name="CloseBtn"
+                HorizontalAlignment="Right"
+                Click="CloseBtn_Click"
+                Style="{StaticResource MaterialDesignFlatButton}">
+                <materialDesign:PackIcon Kind="Close" />
+            </Button>
+        </WrapPanel>
+
+        <m:Map
+            x:Name="NavMap"
+            Panel.ZIndex="1"
+            Center="41.693081,44.801559" 
+            CredentialsProvider="CXHi18FfJRErSX5z8Mme~uV00wpU2XqXgk_MFHQ1zqg~AjmdktsV4en7DI0DUd0mCieDaDhs7rfM4rkE31TPwlcvR9nmmme_OjnrlQvEMJte"
+            Mode="Road"
+            ZoomLevel="16" Margin="0,30,0,10" Grid.Column="1" Grid.RowSpan="2">
+            <Canvas
+                Width="30"
+                Height="30"
+                m:MapLayer.Position="41.693081,44.801559"
+                m:MapLayer.PositionOrigin="BottomCenter">
+                <materialDesign:PackIcon
+                    Width="30"
+                    Height="30"
+                    Foreground="#2196f3"
+                    Kind="MapMarker" />
+            </Canvas>
+        </m:Map>
+
+        <StackPanel
+            Grid.Row="1"
+            Grid.Column="1"
+            Width="35"
+            Height="35"
+            Margin="10,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            Panel.ZIndex="2">
+            <materialDesign:PopupBox
+                Foreground="#2196f3"
+                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                StaysOpen="True">
+                <Grid Width="300" Margin="8,8,8,8">
+                    <Grid.Resources>
+                        <Style BasedOn="{StaticResource MaterialDesignCheckBox}" TargetType="CheckBox">
+                            <Setter Property="Margin" Value="8,8,10,8" />
+                        </Style>
+                        <Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="TextBox">
+                            <Setter Property="materialDesign:HintAssist.IsFloating" Value="True" />
+                            <Setter Property="Margin" Value="8,8,8,8" />
+                        </Style>
+                    </Grid.Resources>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock
+                        Grid.Row="0"
+                        Margin="8,8,8,16"
+                        Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                        Text="OPTIONS" />
+                    <ComboBox
+                        x:Name="FilterCategoryCB"
+                        Grid.Row="1"
+                        Margin="8,4"
+                        materialDesign:HintAssist.Hint="Filter by Category">
+                        <ComboBoxItem Content="None" />
+                    </ComboBox>
+                    <WrapPanel Grid.Row="3" Margin="6,0">
+                        <Label Content="Light Theme:" />
+                        <ToggleButton Click="ThemeBtn_Click" Style="{StaticResource MaterialDesignSwitchToggleButton}" />
+                    </WrapPanel>
+                    <StackPanel
+                        Grid.Row="5"
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal">
+                        <Button
+                            x:Name="AddFilterBtn"
+                            Click="AddFilterBtn_Click"
+                            Command="{x:Static materialDesign:PopupBox.ClosePopupCommand}"
+                            Content="_Save" />
+                        <Button
+                            x:Name="CancelFilterBtn"
+                            Click="CancelFilterBtn_Click"
+                            Command="{x:Static materialDesign:PopupBox.ClosePopupCommand}"
+                            Content="_Cancel">
+                            <Button.Style>
+                                <Style BasedOn="{StaticResource MaterialDesignPopupBoxButton}" TargetType="Button">
+                                    <Setter Property="Foreground" Value="Red" />
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </materialDesign:PopupBox>
+        </StackPanel>
+    </Grid>
+</Window>
